@@ -6,6 +6,8 @@ class City():
       self.name = name
       self.lat = lat
       self.lon = lon
+    def __repr__(self):
+      return f"City:({self.name}, {self.lat}, {self.lon})"
 
 
 # We have a collection of US cities with population over 750,000 stored in the
@@ -28,17 +30,29 @@ def cityreader(cities=[]):
   # Ensure that the lat and lon valuse are all floats
   # For each city record, create a new City instance and add it to the 
   # `cities` list
-    with open('cities.csv', newline='') as y:
-      csv_file = csv.DictReader(y)
-      for i in csv_file:
-          cities.append(City(i['city'], i['lat'], i['lng']))
-    return cities
+    with open('cities.csv', newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        # Advance the reader one row to skip the header
+        next(reader)
+        for row in reader:
+            name = row[0]
+            lat = float(row[3])
+            lon = float(row[4])
+            cities.append(City(name, lat, lon))
+        return cities
+#     with open('cities.csv') as y:
+#       csv_file = csv.DictReader(y, delimiter =',', quotechar="|")
+#       for i in csv_file:
+#           city = City(i['city'], float(i['lat']), float(i['lng']))
+#           cities.append(city)
+#           return cities
 
 cityreader(cities)
 
 # Print the list of cities (name, lat, lon), 1 record per line.
 for c in cities:
-    print(f'"{c.name}", {c.lat}, {c.lon}')
+    print(c)
+    # print(f'"{c.name}", {c.lat}, {c.lon}')
 
 # STRETCH GOAL!
 #
